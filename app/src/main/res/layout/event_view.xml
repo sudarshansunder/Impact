@@ -94,21 +94,14 @@
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@color/divider" />
-
                 <Button
                     android:id="@+id/attendButton"
-                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="60dp"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:background="@android:color/transparent"
                     android:text="Attend"
                     android:textAllCaps="false"
                     android:textSize="12sp" />
