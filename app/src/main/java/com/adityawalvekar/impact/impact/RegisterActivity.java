@@ -2,16 +2,21 @@ package com.adityawalvekar.impact.impact;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,6 +29,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Button register;
     private RequestQueue queue;
     private SharedPreferences prefs;
+    private ImageView profileImage;
+    private String base64;
 
     private boolean validEmailId(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
@@ -160,6 +169,17 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                // Show only images, no videos or anything else
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                // Always show the chooser (if there are multiple options available)
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 6969);
+            }
+        });
     }
 
     private void linkViews() {
@@ -168,6 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPassword = (TextInputLayout) findViewById(R.id.password_confirm);
         name = (TextInputLayout) findViewById(R.id.name_reg);
         register = (Button) findViewById(R.id.email_register);
+        profileImage = (ImageView) findViewById(R.id.profile_picture_login);
     }
 
     private void registerUser() {
@@ -205,9 +226,31 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("username", username.getEditText().getText().toString());
                 params.put("password", password.getEditText().getText().toString());
                 params.put("name", name.getEditText().getText().toString());
+                //params.put("img", getEncodedImage());
                 return params;
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 6969 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                ByteArrayOutputStream bao = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bao);
+                byte[] ba = bao.toByteArray();
+                base64 = Base64.encodeToString(ba, Base64.DEFAULT);
+                // Log.d(TAG, String.valueOf(bitmap));
+                profileImage.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
