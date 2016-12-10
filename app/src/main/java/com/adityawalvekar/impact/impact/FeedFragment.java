@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class FeedFragment extends Fragment {
 
-    private static int numberOfPosts = 10;
+    private static int numberOfPosts = 100;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
     private PostAdapter mPostAdapter;
@@ -99,6 +99,7 @@ public class FeedFragment extends Fragment {
     }
 
     private void getNewsFeed() {
+        newsFeed.clear();
         mRecyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         final String URL = "https://impact.adityawalvekar.com/feed";
@@ -106,7 +107,7 @@ public class FeedFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 refreshLayout.setRefreshing(false);
-                numberOfPosts += 10;
+                numberOfPosts = 100;
                 try {
                     parseJson(response);
                 } catch (JSONException e) {
@@ -142,13 +143,13 @@ public class FeedFragment extends Fragment {
                 JSONObject post = array.getJSONObject(i);
                 switch (post.getInt("event_type")) {
                     case 1:
-                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("desc"), post.getString("date"), post.getBoolean("active")));
+                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("desc"), post.getString("date"), post.getBoolean("active"), post.getString("userimage")));
                         break;
                     case 2:
-                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("title"), post.getString("desc"), post.getString("location"), post.getString("date"), post.getBoolean("active")));
+                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("title"), post.getString("desc"), post.getString("location"), post.getString("date"), post.getBoolean("active"), post.getString("userimage"), post.getString("postimage")));
                         break;
                     case 3:
-                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name")));
+                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("userimage"), post.getString("postimage")));
                         break;
                 }
             }
