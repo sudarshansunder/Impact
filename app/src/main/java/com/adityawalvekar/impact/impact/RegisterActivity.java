@@ -80,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
         bitmapOrg.compress(Bitmap.CompressFormat.JPEG, 100, bao);
         byte[] ba = bao.toByteArray();
-        String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
+        base64 = Base64.encodeToString(ba, Base64.DEFAULT);
         queue = Volley.newRequestQueue(this);
         username.setErrorEnabled(true);
         password.setErrorEnabled(true);

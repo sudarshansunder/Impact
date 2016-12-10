@@ -1,11 +1,12 @@
 package com.adityawalvekar.impact.impact;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -41,16 +42,16 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             postViewHolder.description.setText(mDataSet.get(position).description);
         } else if (holder.getItemViewType() == 2) {
             EventPostViewHolder eventPostViewHolder = (EventPostViewHolder) holder;
-            eventPostViewHolder.location.setText(mDataSet.get(position).location);
+            eventPostViewHolder.eventLocation.setText(mDataSet.get(position).location);
             eventPostViewHolder.eventTitle.setText(mDataSet.get(position).title);
             eventPostViewHolder.eventCreator.setText(mDataSet.get(position).userName);
             eventPostViewHolder.eventDescription.setText(mDataSet.get(position).description);
+            eventPostViewHolder.eventDateTime.setText("On " + mDataSet.get(position).dateTime.substring(0, 10));
         }
     }
 
     @Override
     public int getItemCount() {
-        Log.v("PostAdapter", "Number of items is " + String.valueOf(mDataSet.size()));
         return mDataSet.size();
     }
 
@@ -59,7 +60,7 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mDataSet.get(position).type;
     }
 
-    private static class PostViewHolder extends RecyclerView.ViewHolder {
+    class PostViewHolder extends RecyclerView.ViewHolder {
         TextView userName;
         TextView description;
 
@@ -70,18 +71,39 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    static class EventPostViewHolder extends RecyclerView.ViewHolder {
-        TextView location;
+    class EventPostViewHolder extends RecyclerView.ViewHolder {
+        TextView eventLocation;
         TextView eventCreator;
         TextView eventTitle;
         TextView eventDescription;
+        ImageView eventImage;
+        TextView eventDateTime;
 
         EventPostViewHolder(View v) {
             super(v);
-            location = (TextView) v.findViewById(R.id.eventLocation);
+            eventLocation = (TextView) v.findViewById(R.id.eventLocation);
             eventCreator = (TextView) v.findViewById(R.id.eventCreator);
             eventTitle = (TextView) v.findViewById(R.id.eventTitle);
             eventDescription = (TextView) v.findViewById(R.id.eventDescription);
+            eventImage = (ImageView) v.findViewById(R.id.eventImage);
+            eventDateTime = (TextView) v.findViewById(R.id.eventDateTime);
+            eventImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext, android.R.style.Theme);
+                    View customView = LayoutInflater.from(mContext).inflate(R.layout.fullscreenimage, null, false);
+                    builder.setView(customView);
+                    customView.setBackground(eventImage.getDrawable());
+                    builder.setCancelable(true);
+                    final AlertDialog dialog = builder.show();
+                    customView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+            });
         }
     }
 }

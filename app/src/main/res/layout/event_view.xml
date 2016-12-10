@@ -70,8 +70,19 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Beach Cleaning"
+                    android:textColor="#444"
                     android:textSize="14sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/eventDateTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_toRightOf="@+id/eventTitle"
+                    android:text="On 10/12/2016"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/eventDescription"
@@ -97,12 +108,12 @@
 
                 <Button
                     android:id="@+id/attendButton"
+                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="60dp"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:background="@android:color/transparent"
                     android:text="Attend"
                     android:textAllCaps="false"
                     android:textSize="12sp" />

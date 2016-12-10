@@ -1,13 +1,14 @@
 package com.adityawalvekar.impact.impact;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,65 +29,32 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FeedFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FeedFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FeedFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
+    private static int numberOfPosts = 10;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
     private PostAdapter mPostAdapter;
-    private ArrayList<Post> testData = new ArrayList<Post>();
+    private RequestQueue queue;
+    private ArrayList<Post> testData = new ArrayList<>();
+    private EditText descriptionEditText;
+    private Button postButton;
+    private SwipeRefreshLayout refreshLayout;
+    private SharedPreferences prefs;
 
     public FeedFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FeedFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FeedFragment newInstance(String param1, String param2) {
-        FeedFragment fragment = new FeedFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        queue = Volley.newRequestQueue(getActivity());
+        prefs = getActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
         testData.add(new Post(10, "Varun Ranganathan", "I is a sux"));
         testData.add(new Post(20, "Sudarshan Sunder", getResources().getString(R.string.lipsum)));
         testData.add(new Post(30, "Aditya Walvekar", getResources().getString(R.string.lipsum)));
-        testData.add(new Post(40, "John Doe", "Marina Beach Walk", "A couple of people are meeting to clean up Marina beach. Any who wants to join us is welcome.", "", "Chennai", true));
+        testData.add(new Post(40, "John Doe", "Marina Beach Walk", "A couple of people are meeting to clean up Marina beach. Any who wants to join us is welcome.", "Chennai", "16/12/2016", true));
     }
 
     @Override
@@ -94,17 +62,29 @@ public class FeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
-        Button postButton = (Button) rootView.findViewById(R.id.postButton);
+        refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.feedSwipeRefresh);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queue.cancelAll(getActivity());
+                getNewsFeed();
+            }
+        });
+        descriptionEditText = (EditText) rootView.findViewById(R.id.postText);
+        postButton = (Button) rootView.findViewById(R.id.postButton);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String description;
-                EditText editText = (EditText) rootView.findViewById(R.id.postText);
-                Editable editable = editText.getEditableText();
-                description = editable.toString();
-                Date date = new Date();
-                long currentTime = date.getTime();
-                makePost(description, currentTime);
+                String text = descriptionEditText.getText().toString();
+                if (text.length() <= 0) {
+                    Snackbar.make(view, "Description cannot be empty", Snackbar.LENGTH_SHORT).show();
+                } else if (text.length() >= 120) {
+                    Snackbar.make(view, "Description cannot be more than 120 characters", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Date date = new Date();
+                    long currentTime = date.getTime();
+                    makePost(descriptionEditText.getText().toString(), currentTime, view);
+                }
             }
         });
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.feedRecyclerView);
@@ -112,21 +92,61 @@ public class FeedFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mPostAdapter = new PostAdapter(this.getActivity(), testData);
         mRecyclerView.setAdapter(mPostAdapter);
+        getNewsFeed();
         return rootView;
     }
 
-    public void makePost(final String description, final long currentTime) {
-        RequestQueue requestQueue = Volley.newRequestQueue(this.getActivity());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/post",
+    private void getNewsFeed() {
+        final String URL = "https://impact.adityawalvekar.com/feed";
+        queue.add(new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                refreshLayout.setRefreshing(false);
+                numberOfPosts += 10;
+                parseJson(response);
+                Log.d("Response for feed", response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                refreshLayout.setRefreshing(false);
+                Log.d("Error getting feed", error.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("username", prefs.getString("username", ""));
+                params.put("length", "" + numberOfPosts);
+                return params;
+            }
+        });
+    }
+
+    private void parseJson(String response) {
+
+    }
+
+    public void makePost(final String description, final long currentTime, final View view) {
+
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Posting");
+        dialog.show();
+
+        queue.add(new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/post",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                        dialog.dismiss();
+                        descriptionEditText.setText("");
+                        Snackbar.make(view, "Successfully posted!", Snackbar.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.v("FeedFragment", "Error Posting");
+                dialog.dismiss();
+                Snackbar.make(view, "There was an error in posting, please try again!", Snackbar.LENGTH_SHORT).show();
+                Log.d("FeedFragment", "Error Posting " + error);
             }
         }) {
             @Override
@@ -141,29 +161,6 @@ public class FeedFragment extends Fragment {
                 hashMap.put("event_type", String.valueOf(1));
                 return hashMap;
             }
-        };
-        requestQueue.add(stringRequest);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        });
     }
 }

@@ -1,17 +1,13 @@
 package com.adityawalvekar.impact.impact;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.renderscript.ScriptGroup;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.ButtonBarLayout;
 import android.text.Editable;
 import android.text.InputType;
 import android.util.Base64;
@@ -37,7 +33,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -59,17 +54,13 @@ public class EventCreatorFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    final Calendar calendar = Calendar.getInstance();
     ImageView imageView;
     String base64 = "";
     EditText eventDateEditText;
-
-    final Calendar calendar = Calendar.getInstance();
-
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
     private OnFragmentInteractionListener mListener;
 
     public EventCreatorFragment() {
@@ -107,7 +98,7 @@ public class EventCreatorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View rootView =  inflater.inflate(R.layout.fragment_event_creator, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_event_creator, container, false);
         imageView = (ImageView) rootView.findViewById(R.id.eventCreatorImage);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,8 +117,8 @@ public class EventCreatorFragment extends Fragment {
                 EditText eventNameEditText = (EditText) rootView.findViewById(R.id.eventCreatorName);
                 EditText eventDescriptionEditText = (EditText) rootView.findViewById(R.id.eventCreatorDescription);
                 EditText eventAddressEditText = (EditText) rootView.findViewById(R.id.eventCreatorAddress);
-                if(eventNameEditText.getText().toString().matches("")||eventDescriptionEditText.getText().toString().matches("")||eventAddressEditText.getText().toString().matches("")) {
-                    Toast.makeText(getActivity(),"Please enter data in all the fields",Toast.LENGTH_SHORT).show();
+                if (eventNameEditText.getText().toString().matches("") || eventDescriptionEditText.getText().toString().matches("") || eventAddressEditText.getText().toString().matches("")) {
+                    Toast.makeText(getActivity(), "Please enter data in all the fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Editable editable1 = eventNameEditText.getText();
@@ -136,12 +127,12 @@ public class EventCreatorFragment extends Fragment {
                 String eventName = editable1.toString();
                 String eventDescription = editable2.toString();
                 String eventAddress = editable3.toString();
-                if(eventDateEditText.getText().toString().matches("")) {
-                    Toast.makeText(getActivity(),"Please choose a Date",Toast.LENGTH_SHORT).show();
+                if (eventDateEditText.getText().toString().matches("")) {
+                    Toast.makeText(getActivity(), "Please choose a Date", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(base64.matches("")) {
-                    Toast.makeText(getActivity(),"Please pick an Image",Toast.LENGTH_SHORT).show();
+                if (base64.matches("")) {
+                    Toast.makeText(getActivity(), "Please pick an Image", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 long currTime = calendar.getTime().getTime();
@@ -162,19 +153,19 @@ public class EventCreatorFragment extends Fragment {
         eventDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(getActivity(),date,calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(getActivity(), date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
         return rootView;
     }
 
-    private void updateLabel(){
+    private void updateLabel() {
         String myFormat = "MM/dd/yy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(myFormat, Locale.US);
         eventDateEditText.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
-    public void createEvent(final String eventName, final String eventDescription, final String eventAddress, String img, final long currTime){
+    public void createEvent(final String eventName, final String eventDescription, final String eventAddress, String img, final long currTime) {
         RequestQueue requestQueue = Volley.newRequestQueue(this.getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/event", new Response.Listener<String>() {
             @Override
@@ -184,19 +175,19 @@ public class EventCreatorFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.v("EventCreatorFragment","Error creating event");
+                Log.v("EventCreatorFragment", "Error creating event");
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> hashMap = new HashMap<String,String>();
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_date",MODE_PRIVATE);
+                HashMap<String, String> hashMap = new HashMap<String, String>();
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_data", MODE_PRIVATE);
                 String userName = sharedPreferences.getString("username", "");
                 hashMap.put("username", userName);
                 hashMap.put("title", eventName);
                 hashMap.put("desc", eventDescription);
                 hashMap.put("picture", base64);
-                hashMap.put("location", eventAddress);
+                hashMap.put("eventLocation", eventAddress);
                 hashMap.put("date", String.valueOf(currTime));
                 hashMap.put("event_type", String.valueOf(2));
                 return hashMap;
