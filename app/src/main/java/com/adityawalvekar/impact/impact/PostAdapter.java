@@ -59,7 +59,9 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             postViewHolder.userName.setText(mDataSet.get(position).userName);
             postViewHolder.description.setText(mDataSet.get(position).description);
             postViewHolder.dateTime.setText(mDataSet.get(position).dateTime);
-            postViewHolder.userImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
+            //postViewHolder.userImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
+            ImageViewBase64Loader imageViewBase64Loader = new ImageViewBase64Loader(mContext);
+            imageViewBase64Loader.loadBitmap(mDataSet.get(position).userImage, postViewHolder.userImage);
         } else if (holder.getItemViewType() == 2) {
             EventPostViewHolder eventPostViewHolder = (EventPostViewHolder) holder;
             eventPostViewHolder.eventLocation.setText(mDataSet.get(position).location);
@@ -67,13 +69,19 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             eventPostViewHolder.eventCreator.setText(mDataSet.get(position).userName);
             eventPostViewHolder.eventDescription.setText(mDataSet.get(position).description);
             eventPostViewHolder.eventDateTime.setText(mDataSet.get(position).dateTime);
-            eventPostViewHolder.userImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
-            eventPostViewHolder.eventImage.setImageBitmap(decodeImage(mDataSet.get(position).eventImage));
+            //eventPostViewHolder.userImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
+            //eventPostViewHolder.eventImage.setImageBitmap(decodeImage(mDataSet.get(position).eventImage));
+            ImageViewBase64Loader imageViewBase64Loader = new ImageViewBase64Loader(mContext);
+            imageViewBase64Loader.loadBitmap(mDataSet.get(position).userImage, eventPostViewHolder.userImage);
+            imageViewBase64Loader.loadBitmap(mDataSet.get(position).eventImage, eventPostViewHolder.eventImage);
         } else if (holder.getItemViewType() == 3) {
             DonatePostViewHolder donatePostViewHolder = (DonatePostViewHolder) holder;
             donatePostViewHolder.userName.setText(mDataSet.get(position).userName);
-            donatePostViewHolder.donateImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
-            donatePostViewHolder.donateUserImage.setImageBitmap(decodeImage(mDataSet.get(position).eventImage));
+            //donatePostViewHolder.donateImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
+            //donatePostViewHolder.donateUserImage.setImageBitmap(decodeImage(mDataSet.get(position).eventImage));
+            ImageViewBase64Loader imageViewBase64Loader = new ImageViewBase64Loader(mContext);
+            imageViewBase64Loader.loadBitmap(mDataSet.get(position).userImage, donatePostViewHolder.donateImage);
+            imageViewBase64Loader.loadBitmap(mDataSet.get(position).eventImage, donatePostViewHolder.donateUserImage);
         }
     }
 
