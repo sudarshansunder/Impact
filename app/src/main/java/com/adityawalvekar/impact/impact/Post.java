@@ -1,15 +1,12 @@
 package com.adityawalvekar.impact.impact;
 
-/**
- * Created by vvvro on 12/10/2016.
- */
-
 public class Post {
+
     int pid;
     String userName, title, description;
-    String imgUrl;
     String location;
-    Boolean active;
+    String dateTime;
+    boolean active;
     int type;
 
     public Post() {
@@ -23,14 +20,14 @@ public class Post {
         type = 1;
     }
 
-    public Post(int pid, String userName, String title, String description, String imgUrl, String location, Boolean active) {
+    public Post(int pid, String userName, String title, String description, String location, String dateTime, boolean active) {
         this.pid = pid;
         this.userName = userName;
         this.title = title;
         this.description = description;
-        this.imgUrl = imgUrl;
         this.location = location;
         this.active = active;
+        this.dateTime = dateTime;
         type = 2;
     }
 }

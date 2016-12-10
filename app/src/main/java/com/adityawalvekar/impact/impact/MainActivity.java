@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_feed) {
-            // Handle the camera action
+
             FeedFragment feedFragment = new FeedFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
