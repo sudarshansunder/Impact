@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity
         username.setText(prefs.getString("username", ""));
         fullname.setText(prefs.getString("name", ""));
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_feed);
+        onNavigationItemSelected(navigationView.getMenu().getItem(0));
+
     }
 
     @Override

@@ -26,9 +26,10 @@
                 <EditText
                     android:id="@+id/postText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="70dp"
                     android:layout_weight="4"
-                    android:hint="Make a post!"
+                    android:background="@android:color/transparent"
+                    android:hint="What good are you doing today?"
                     android:padding="8dp" />
 
                 <Button
