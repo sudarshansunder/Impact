@@ -1,6 +1,7 @@
 package com.adityawalvekar.impact.impact;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 
@@ -88,11 +92,14 @@ public class FriendsFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getActivity(),"You searched for "+query,Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(getActivity(),"You searched for "+query,Toast.LENGTH_SHORT).show();
                 Friends f1 = new Friends("suddu61","Sudarshan Sunder",true);
                 Friends f2 = new Friends("John","John",false);
                 mDataSet.add(f1);
-                mDataSet.add(f2);
+                mDataSet.add(f2);*/
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+                String userName = sharedPreferences.getString("username", "");
+                //RequestQueue requestQueue = Volley.newRequestQueue(this.getActivity(), )
                 friendsAdapter.notifyDataSetChanged();
                 return true;
             }
