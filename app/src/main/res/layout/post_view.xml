@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/donateImage"
+            android:id="@+id/postUserImage"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="15dp"
@@ -18,22 +18,22 @@
             android:src="@drawable/stock" />
 
         <TextView
-            android:id="@+id/donateName"
+            android:id="@+id/postUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
-            android:layout_toRightOf="@+id/donateImage"
+            android:layout_toRightOf="@+id/postUserImage"
             android:text="Varun Ranganathan"
             android:textColor="#444"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/eventDescription"
+            android:id="@+id/postDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/donateImage"
+            android:layout_below="@+id/postUserImage"
             android:layout_marginTop="1dp"
             android:paddingBottom="20dp"
             android:paddingLeft="12dp"
@@ -46,8 +46,8 @@
             android:id="@+id/dateOfPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/donateName"
-            android:layout_below="@+id/donateName"
+            android:layout_alignLeft="@+id/postUserName"
+            android:layout_below="@+id/postUserName"
             android:layout_marginRight="10dp"
             android:text="Dec 9 at 15:34"
             android:textSize="13sp" />

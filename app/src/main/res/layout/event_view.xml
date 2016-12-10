@@ -18,7 +18,7 @@
             android:src="@drawable/stock" />
 
         <TextView
-            android:id="@+id/donateName"
+            android:id="@+id/donatePostUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -34,8 +34,8 @@
             android:id="@+id/dateOfPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/donateName"
-            android:layout_below="@+id/donateName"
+            android:layout_alignLeft="@+id/donatePostUserName"
+            android:layout_below="@+id/donatePostUserName"
             android:layout_marginRight="10dp"
             android:text="Dec 9 at 15:34"
             android:textSize="13sp" />

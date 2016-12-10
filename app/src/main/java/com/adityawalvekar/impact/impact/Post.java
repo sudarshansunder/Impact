@@ -6,17 +6,16 @@ public class Post {
     String userName, title, description;
     String location;
     String dateTime;
+    String userImage;
+    String eventImage;
     boolean active;
     int type;
     private String date, time;
 
-    public Post() {
-
-    }
-
-    public Post(int pid, String userName, String description, String dateTime, boolean active) { //Case 1
+    public Post(int pid, String userName, String description, String dateTime, boolean active, String userImage) { //Case 1
         this.pid = pid;
         this.userName = userName;
+        this.userImage = userImage;
         this.description = description;
         this.dateTime = dateTime;
         this.active = active;
@@ -24,8 +23,10 @@ public class Post {
         parseDateTime();
     }
 
-    public Post(int pid, String userName, String title, String description, String location, String dateTime, boolean active) { //Case 2
+    public Post(int pid, String userName, String title, String description, String location, String dateTime, boolean active, String userImage, String eventImage) { //Case 2
         this.pid = pid;
+        this.userImage = userImage;
+        this.eventImage = eventImage;
         this.userName = userName;
         this.title = title;
         this.description = description;
@@ -36,9 +37,11 @@ public class Post {
         type = 2;
     }
 
-    public Post(int pid, String userName) { //Type 3
+    public Post(int pid, String userName, String userImage, String eventImage) { //Type 3
         this.pid = pid;
         this.userName = userName;
+        this.userImage = userImage;
+        this.eventImage = eventImage;
         type = 3;
     }
 
@@ -89,7 +92,10 @@ public class Post {
         this.date = "" + month + " " + day;
         this.time = this.dateTime.substring(11, dateTime.length() - 3);
         this.dateTime = null;
-        this.dateTime = "" + this.date + " at " + this.time;
+        if (type == 1)
+            this.dateTime = "" + this.date + " at " + this.time;
+        else
+            this.dateTime = "" + this.date;
     }
 
 

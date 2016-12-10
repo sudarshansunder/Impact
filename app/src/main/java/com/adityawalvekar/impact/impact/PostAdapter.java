@@ -1,13 +1,19 @@
 package com.adityawalvekar.impact.impact;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 
@@ -15,10 +21,17 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<Post> mDataSet;
     private Context mContext;
+    private RequestQueue queue;
 
     PostAdapter(Context context, ArrayList<Post> myDataSet) {
         mContext = context;
         mDataSet = myDataSet;
+        queue = Volley.newRequestQueue(context);
+    }
+
+    private Bitmap decodeImage(String base64) {
+        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
     @Override
@@ -46,16 +59,21 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             postViewHolder.userName.setText(mDataSet.get(position).userName);
             postViewHolder.description.setText(mDataSet.get(position).description);
             postViewHolder.dateTime.setText(mDataSet.get(position).dateTime);
+            postViewHolder.userImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
         } else if (holder.getItemViewType() == 2) {
             EventPostViewHolder eventPostViewHolder = (EventPostViewHolder) holder;
             eventPostViewHolder.eventLocation.setText(mDataSet.get(position).location);
             eventPostViewHolder.eventTitle.setText(mDataSet.get(position).title);
             eventPostViewHolder.eventCreator.setText(mDataSet.get(position).userName);
             eventPostViewHolder.eventDescription.setText(mDataSet.get(position).description);
-            eventPostViewHolder.eventDateTime.setText("On " + mDataSet.get(position).dateTime.substring(0, 10));
+            eventPostViewHolder.eventDateTime.setText(mDataSet.get(position).dateTime);
+            eventPostViewHolder.userImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
+            eventPostViewHolder.eventImage.setImageBitmap(decodeImage(mDataSet.get(position).eventImage));
         } else if (holder.getItemViewType() == 3) {
             DonatePostViewHolder donatePostViewHolder = (DonatePostViewHolder) holder;
             donatePostViewHolder.userName.setText(mDataSet.get(position).userName);
+            donatePostViewHolder.donateImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
+            donatePostViewHolder.donateUserImage.setImageBitmap(decodeImage(mDataSet.get(position).eventImage));
         }
     }
 
@@ -73,12 +91,14 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView userName;
         TextView description;
         TextView dateTime;
+        ImageView userImage;
 
         PostViewHolder(View v) {
             super(v);
-            userName = (TextView) v.findViewById(R.id.donateName);
-            description = (TextView) v.findViewById(R.id.eventDescription);
+            userName = (TextView) v.findViewById(R.id.postUserName);
+            description = (TextView) v.findViewById(R.id.postDescription);
             dateTime = (TextView) v.findViewById(R.id.dateOfPost);
+            userImage = (ImageView) v.findViewById(R.id.postUserImage);
         }
     }
 
@@ -89,14 +109,16 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView eventDescription;
         ImageView eventImage;
         TextView eventDateTime;
+        ImageView userImage;
 
         EventPostViewHolder(View v) {
             super(v);
             eventLocation = (TextView) v.findViewById(R.id.eventLocation);
-            eventCreator = (TextView) v.findViewById(R.id.donateName);
+            eventCreator = (TextView) v.findViewById(R.id.donatePostUserName);
             eventTitle = (TextView) v.findViewById(R.id.eventTitle);
             eventDescription = (TextView) v.findViewById(R.id.eventDescription);
             eventImage = (ImageView) v.findViewById(R.id.eventImage);
+            userImage = (ImageView) v.findViewById(R.id.eventPosterImage);
             eventDateTime = (TextView) v.findViewById(R.id.eventDateTime);
             eventImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -121,11 +143,13 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class DonatePostViewHolder extends RecyclerView.ViewHolder {
 
         TextView userName;
+        ImageView donateImage, donateUserImage;
 
         DonatePostViewHolder(View v) {
             super(v);
-            userName = (TextView) v.findViewById(R.id.donateName);
+            userName = (TextView) v.findViewById(R.id.donatePostUserName);
+            donateImage = (ImageView) v.findViewById(R.id.donateCompanyImage);
+            donateUserImage = (ImageView) v.findViewById(R.id.donatePostUserImage);
         }
     }
-
 }

@@ -18,7 +18,7 @@
             android:src="@drawable/stock" />
 
         <TextView
-            android:id="@+id/donateName"
+            android:id="@+id/donatePostUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -30,12 +30,13 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/donateImage"
+            android:id="@+id/donatePostUserImage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:layout_below="@+id/donateCompanyImage"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:src="@drawable/stockevent" />
 
     </RelativeLayout>
