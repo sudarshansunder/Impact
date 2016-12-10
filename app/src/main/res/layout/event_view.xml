@@ -1,46 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:orientation="vertical"
     android:padding="4dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingBottom="4dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="4dp">
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/eventPosterImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/stock" />
 
         <TextView
             android:id="@+id/eventCreator"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="user"
-            android:textSize="16dp" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/eventPosterImage"
+            android:text="Siddharth Kothiyal"
+            android:textColor="#444"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
 
         <TextView
-            android:id="@+id/eventTitle"
-            android:layout_width="match_parent"
+            android:id="@+id/dateOfPost"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Marina Beach Cleaning"
-            android:textSize="16dp" />
+            android:layout_alignLeft="@+id/eventCreator"
+            android:layout_below="@+id/eventCreator"
+            android:layout_marginRight="10dp"
+            android:text="Dec 9 at 15:34"
+            android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Marina Beach"
-            android:textSize="16dp" />
 
-        <TextView
-            android:id="@+id/eventDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Help clean Marina Beach!"
-            android:textSize="24dp" />
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>
