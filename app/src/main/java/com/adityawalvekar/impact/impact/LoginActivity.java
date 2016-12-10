@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                         prefs.edit()
                                 .putBoolean("auth", true)
                                 .putString("name", res.getString("name"))
-                                .putString("email", username.getEditText().getText().toString())
+                                .putString("username", username.getEditText().getText().toString())
                                 .apply();
                     }
                 } catch (JSONException e) {

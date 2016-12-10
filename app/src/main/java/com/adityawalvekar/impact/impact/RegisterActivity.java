@@ -1,5 +1,6 @@
 package com.adityawalvekar.impact.impact;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -42,13 +43,14 @@ public class RegisterActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private ImageView profileImage;
     private String base64;
+    private ProgressDialog dialog;
 
     private boolean validEmailId(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private boolean validPassword(String password) {
-        return password.length() > 6 && password.length() < 32;
+        return password.length() >= 6 && password.length() <= 32;
     }
 
     private boolean validPasswordConfirm(String confirm) {
@@ -173,10 +175,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                // Show only images, no videos or anything else
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                // Always show the chooser (if there are multiple options available)
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), 6969);
             }
         });
@@ -192,10 +192,17 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Creating Account");
+        dialog.show();
+
+
         final String URL = "https://impact.adityawalvekar.com/register";
         queue.add(new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                dialog.dismiss();
                 Log.d("Register Response", response);
                 try {
                     JSONObject res = new JSONObject(response);
@@ -204,7 +211,8 @@ public class RegisterActivity extends AppCompatActivity {
                         prefs.edit()
                                 .putBoolean("auth", true)
                                 .putString("name", name.getEditText().getText().toString())
-                                .putString("email", username.getEditText().getText().toString())
+                                .putString("username", username.getEditText().getText().toString())
+                                .putString("image", res.getString("picture"))
                                 .apply();
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         finish();
@@ -216,8 +224,10 @@ public class RegisterActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                dialog.dismiss();
                 Log.d("Register error", error.toString());
-                Log.d("Register error body", error.getMessage());
+                if (error.getMessage() != null)
+                    Log.d("Register error body", error.getMessage());
             }
         }) {
             @Override
@@ -225,8 +235,8 @@ public class RegisterActivity extends AppCompatActivity {
                 HashMap<String, String> params = new HashMap<String, String>();
                 params.put("username", username.getEditText().getText().toString());
                 params.put("password", password.getEditText().getText().toString());
-                params.put("name", name.getEditText().getText().toString());
-                //params.put("img", getEncodedImage());
+                params.put("fullname", name.getEditText().getText().toString());
+                params.put("picture", base64);
                 return params;
             }
         });
@@ -242,7 +252,7 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 ByteArrayOutputStream bao = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bao);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 25, bao);
                 byte[] ba = bao.toByteArray();
                 base64 = Base64.encodeToString(ba, Base64.DEFAULT);
                 // Log.d(TAG, String.valueOf(bitmap));
