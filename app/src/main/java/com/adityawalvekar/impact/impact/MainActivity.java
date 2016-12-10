@@ -1,11 +1,9 @@
 package com.adityawalvekar.impact.impact;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,9 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,15 +26,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        prefs = getSharedPreferences("user_data", MODE_PRIVATE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -40,6 +35,12 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView username, fullname;
+        ImageView profileImage;
+        username = (TextView) headerView.findViewById(R.id.header_username);
+        fullname = (TextView) headerView.findViewById(R.id.header_full_name);
+        //profileImage = (ImageView) headerView.findViewById(R.id.prof)
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -85,10 +86,10 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
             FeedFragment feedFragment = new FeedFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
-            for(int i=0;i<fragmentManager.getBackStackEntryCount();i++){
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
             }
-            fragmentManager.beginTransaction().replace(R.id.content_main,feedFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_main, feedFragment).commit();
         } else if (id == R.id.nav_profile) {
 
         } else if (id == R.id.nav_events) {
