@@ -78,7 +78,7 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         EventPostViewHolder(View v) {
             super(v);
-            location = (TextView) v.findViewById(R.id.location);
+            location = (TextView) v.findViewById(R.id.eventLocation);
             eventCreator = (TextView) v.findViewById(R.id.eventCreator);
             eventTitle = (TextView) v.findViewById(R.id.eventTitle);
             eventDescription = (TextView) v.findViewById(R.id.eventDescription);

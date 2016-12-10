@@ -1,5 +1,6 @@
 package com.adityawalvekar.impact.impact;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,17 +9,21 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.renderscript.ScriptGroup;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.ButtonBarLayout;
 import android.text.Editable;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,8 +35,11 @@ import com.android.volley.toolbox.Volley;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
@@ -58,6 +66,9 @@ public class EventCreatorFragment extends Fragment {
 
     ImageView imageView;
     String base64 = "";
+    EditText eventDateEditText;
+
+    final Calendar calendar = Calendar.getInstance();
 
     private OnFragmentInteractionListener mListener;
 
@@ -115,18 +126,52 @@ public class EventCreatorFragment extends Fragment {
                 EditText eventNameEditText = (EditText) rootView.findViewById(R.id.eventCreatorName);
                 EditText eventDescriptionEditText = (EditText) rootView.findViewById(R.id.eventCreatorDescription);
                 EditText eventAddressEditText = (EditText) rootView.findViewById(R.id.eventCreatorAddress);
+                if(eventNameEditText.getText().toString().matches("")||eventDescriptionEditText.getText().toString().matches("")||eventAddressEditText.getText().toString().matches("")) {
+                    Toast.makeText(getActivity(),"Please enter data in all the fields",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Editable editable1 = eventNameEditText.getText();
                 Editable editable2 = eventDescriptionEditText.getText();
                 Editable editable3 = eventAddressEditText.getText();
                 String eventName = editable1.toString();
                 String eventDescription = editable2.toString();
                 String eventAddress = editable3.toString();
-                Date date = new Date();
-                long currTime = date.getTime();
+                if(eventDateEditText.getText().toString().matches("")) {
+                    Toast.makeText(getActivity(),"Please choose a Date",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(base64.matches("")) {
+                    Toast.makeText(getActivity(),"Please pick an Image",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                long currTime = calendar.getTime().getTime();
                 createEvent(eventName, eventDescription, eventAddress, base64, currTime);
             }
         });
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                calendar.set(Calendar.YEAR, i);
+                calendar.set(Calendar.MONTH, i1);
+                calendar.set(Calendar.DAY_OF_MONTH, i2);
+                updateLabel();
+            }
+        };
+        eventDateEditText = (EditText) rootView.findViewById(R.id.eventDate);
+        eventDateEditText.setInputType(InputType.TYPE_NULL);
+        eventDateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(getActivity(),date,calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
         return rootView;
+    }
+
+    private void updateLabel(){
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(myFormat, Locale.US);
+        eventDateEditText.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
     public void createEvent(final String eventName, final String eventDescription, final String eventAddress, String img, final long currTime){

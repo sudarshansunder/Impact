@@ -41,6 +41,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Date"
+        />
+    <EditText
+        android:id="@+id/eventDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Pick a date"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Choose an Image"
         />
     <ImageView

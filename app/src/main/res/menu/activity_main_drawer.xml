@@ -3,7 +3,11 @@
 
     <item
         android:id="@+id/nav_feed"
-        android:title="Event Feed" />
+        android:title="Feed" />
+    <item
+        android:id="@+id/nav_create_event"
+        android:title="Create Event"
+        />
     <item
         android:id="@+id/nav_profile"
         android:title="Profile" />
