@@ -27,11 +27,16 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.post_view, parent, false);
             return new PostViewHolder(v);
-        } else {
+        } else if (viewType == 2) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.event_view, parent, false);
             return new EventPostViewHolder(v);
+        } else if (viewType == 3) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.donate_view, parent, false);
+            return new DonatePostViewHolder(v);
         }
+        return null;
     }
 
     @Override
@@ -40,6 +45,7 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             PostViewHolder postViewHolder = (PostViewHolder) holder;
             postViewHolder.userName.setText(mDataSet.get(position).userName);
             postViewHolder.description.setText(mDataSet.get(position).description);
+            postViewHolder.dateTime.setText(mDataSet.get(position).dateTime);
         } else if (holder.getItemViewType() == 2) {
             EventPostViewHolder eventPostViewHolder = (EventPostViewHolder) holder;
             eventPostViewHolder.eventLocation.setText(mDataSet.get(position).location);
@@ -47,6 +53,9 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             eventPostViewHolder.eventCreator.setText(mDataSet.get(position).userName);
             eventPostViewHolder.eventDescription.setText(mDataSet.get(position).description);
             eventPostViewHolder.eventDateTime.setText("On " + mDataSet.get(position).dateTime.substring(0, 10));
+        } else if (holder.getItemViewType() == 3) {
+            DonatePostViewHolder donatePostViewHolder = (DonatePostViewHolder) holder;
+            donatePostViewHolder.userName.setText(mDataSet.get(position).userName);
         }
     }
 
@@ -63,11 +72,13 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class PostViewHolder extends RecyclerView.ViewHolder {
         TextView userName;
         TextView description;
+        TextView dateTime;
 
         PostViewHolder(View v) {
             super(v);
-            userName = (TextView) v.findViewById(R.id.eventCreator);
+            userName = (TextView) v.findViewById(R.id.donateName);
             description = (TextView) v.findViewById(R.id.eventDescription);
+            dateTime = (TextView) v.findViewById(R.id.dateOfPost);
         }
     }
 
@@ -82,7 +93,7 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         EventPostViewHolder(View v) {
             super(v);
             eventLocation = (TextView) v.findViewById(R.id.eventLocation);
-            eventCreator = (TextView) v.findViewById(R.id.eventCreator);
+            eventCreator = (TextView) v.findViewById(R.id.donateName);
             eventTitle = (TextView) v.findViewById(R.id.eventTitle);
             eventDescription = (TextView) v.findViewById(R.id.eventDescription);
             eventImage = (ImageView) v.findViewById(R.id.eventImage);
@@ -106,4 +117,15 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
         }
     }
+
+    class DonatePostViewHolder extends RecyclerView.ViewHolder {
+
+        TextView userName;
+
+        DonatePostViewHolder(View v) {
+            super(v);
+            userName = (TextView) v.findViewById(R.id.donateName);
+        }
+    }
+
 }

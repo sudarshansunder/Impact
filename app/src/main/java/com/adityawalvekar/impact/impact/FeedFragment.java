@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,6 +25,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,11 +42,12 @@ public class FeedFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private PostAdapter mPostAdapter;
     private RequestQueue queue;
-    private ArrayList<Post> testData = new ArrayList<>();
+    private ArrayList<Post> newsFeed = new ArrayList<>();
     private EditText descriptionEditText;
     private Button postButton;
     private SwipeRefreshLayout refreshLayout;
     private SharedPreferences prefs;
+    private ProgressBar progressBar;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -51,10 +58,6 @@ public class FeedFragment extends Fragment {
         super.onCreate(savedInstanceState);
         queue = Volley.newRequestQueue(getActivity());
         prefs = getActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        testData.add(new Post(10, "Varun Ranganathan", "I is a sux"));
-        testData.add(new Post(20, "Sudarshan Sunder", getResources().getString(R.string.lipsum)));
-        testData.add(new Post(30, "Aditya Walvekar", getResources().getString(R.string.lipsum)));
-        testData.add(new Post(40, "John Doe", "Marina Beach Walk", "A couple of people are meeting to clean up Marina beach. Any who wants to join us is welcome.", "Chennai", "16/12/2016", true));
     }
 
     @Override
@@ -63,6 +66,7 @@ public class FeedFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.feedSwipeRefresh);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.feedProgressBar);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -90,20 +94,24 @@ public class FeedFragment extends Fragment {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.feedRecyclerView);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mPostAdapter = new PostAdapter(this.getActivity(), testData);
-        mRecyclerView.setAdapter(mPostAdapter);
         getNewsFeed();
         return rootView;
     }
 
     private void getNewsFeed() {
+        mRecyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
         final String URL = "https://impact.adityawalvekar.com/feed";
         queue.add(new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 refreshLayout.setRefreshing(false);
                 numberOfPosts += 10;
-                parseJson(response);
+                try {
+                    parseJson(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Log.d("Response for feed", response);
             }
         }, new Response.ErrorListener() {
@@ -111,6 +119,9 @@ public class FeedFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 refreshLayout.setRefreshing(false);
                 Log.d("Error getting feed", error.toString());
+                mRecyclerView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(getActivity(), "Error in retrieving feed", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -123,8 +134,31 @@ public class FeedFragment extends Fragment {
         });
     }
 
-    private void parseJson(String response) {
-
+    private void parseJson(String response) throws JSONException {
+        JSONObject json = new JSONObject(response);
+        if (json.has("status") && json.getBoolean("status")) {
+            JSONArray array = json.getJSONArray("feed");
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject post = array.getJSONObject(i);
+                switch (post.getInt("event_type")) {
+                    case 1:
+                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("desc"), post.getString("date"), post.getBoolean("active")));
+                        break;
+                    case 2:
+                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("title"), post.getString("desc"), post.getString("location"), post.getString("date"), post.getBoolean("active")));
+                        break;
+                    case 3:
+                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name")));
+                        break;
+                }
+            }
+        } else {
+            Log.d("Error in data", "Status is false");
+        }
+        mPostAdapter = new PostAdapter(this.getActivity(), newsFeed);
+        mRecyclerView.setAdapter(mPostAdapter);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     public void makePost(final String description, final long currentTime, final View view) {
