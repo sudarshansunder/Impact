@@ -86,7 +86,7 @@ public class FeedFragment extends Fragment {
         testData.add(new Post(10, "Varun Ranganathan", "I is a sux"));
         testData.add(new Post(20, "Sudarshan Sunder", getResources().getString(R.string.lipsum)));
         testData.add(new Post(30, "Aditya Walvekar", getResources().getString(R.string.lipsum)));
-        testData.add(new Post(40, "John Doe", "Marina Beach Walk", "Walk and Clean the best beach ever!", "", "Chennai", true));
+        testData.add(new Post(40, "John Doe", "Marina Beach Walk", "A couple of people are meeting to clean up Marina beach. Any who wants to join us is welcome.", "", "Chennai", true));
     }
 
     @Override

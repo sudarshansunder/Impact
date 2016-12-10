@@ -1,15 +1,12 @@
 package com.adityawalvekar.impact.impact;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.ButtonBarLayout;
 import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
@@ -51,14 +48,11 @@ public class EventCreatorFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    ImageView imageView;
+    String base64 = "";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    ImageView imageView;
-    String base64 = "";
-
     private OnFragmentInteractionListener mListener;
 
     public EventCreatorFragment() {
@@ -96,7 +90,7 @@ public class EventCreatorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View rootView =  inflater.inflate(R.layout.fragment_event_creator, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_event_creator, container, false);
         imageView = (ImageView) rootView.findViewById(R.id.eventCreatorImage);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +123,7 @@ public class EventCreatorFragment extends Fragment {
         return rootView;
     }
 
-    public void createEvent(final String eventName, final String eventDescription, final String eventAddress, String img, final long currTime){
+    public void createEvent(final String eventName, final String eventDescription, final String eventAddress, String img, final long currTime) {
         RequestQueue requestQueue = Volley.newRequestQueue(this.getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/event", new Response.Listener<String>() {
             @Override
@@ -139,13 +133,13 @@ public class EventCreatorFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.v("EventCreatorFragment","Error creating event");
+                Log.v("EventCreatorFragment", "Error creating event");
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> hashMap = new HashMap<String,String>();
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_date",MODE_PRIVATE);
+                HashMap<String, String> hashMap = new HashMap<String, String>();
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_date", MODE_PRIVATE);
                 String userName = sharedPreferences.getString("username", "");
                 hashMap.put("username", userName);
                 hashMap.put("title", eventName);
