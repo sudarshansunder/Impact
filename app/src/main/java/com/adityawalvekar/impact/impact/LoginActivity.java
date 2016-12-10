@@ -43,8 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validLogin() {
-        boolean e = username.getError() != null;
-        boolean p = password.getError() != null;
+        boolean e = username.getError() == null;
+        boolean p = password.getError() == null;
         return e && p;
     }
 

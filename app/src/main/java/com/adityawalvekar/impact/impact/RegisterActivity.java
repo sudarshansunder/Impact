@@ -1,5 +1,6 @@
 package com.adityawalvekar.impact.impact;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -50,10 +51,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean validLogin() {
-        boolean e = username.getError() != null;
-        boolean p = password.getError() != null;
-        boolean cp = confirmPassword.getError() != null;
-        boolean n = name.getError() != null;
+        boolean e = username.getError() == null;
+        boolean p = password.getError() == null;
+        boolean cp = confirmPassword.getError() == null;
+        boolean n = name.getError() == null;
         return e && p && cp && n;
     }
 
@@ -166,7 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
         password = (TextInputLayout) findViewById(R.id.password_reg);
         confirmPassword = (TextInputLayout) findViewById(R.id.password_confirm);
         name = (TextInputLayout) findViewById(R.id.name_reg);
-        register = (Button) findViewById(R.id.email_register_button);
+        register = (Button) findViewById(R.id.email_register);
     }
 
     private void registerUser() {
@@ -184,6 +185,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 .putString("name", name.getEditText().getText().toString())
                                 .putString("email", username.getEditText().getText().toString())
                                 .apply();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        finish();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
