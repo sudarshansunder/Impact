@@ -99,7 +99,14 @@ public class MainActivity extends AppCompatActivity
                 fragmentManager.popBackStack();
             }
             fragmentManager.beginTransaction().replace(R.id.content_main, feedFragment).commit();
-        } else if (id == R.id.nav_profile) {
+        } else if(id == R.id.nav_create_event) {
+            EventCreatorFragment eventCreatorFragment = new EventCreatorFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            for(int i=0;i<fragmentManager.getBackStackEntryCount();i++){
+                fragmentManager.popBackStack();
+            }
+            fragmentManager.beginTransaction().replace(R.id.content_main, eventCreatorFragment).commit();
+        }else if (id == R.id.nav_profile) {
 
         } else if (id == R.id.nav_events) {
 
