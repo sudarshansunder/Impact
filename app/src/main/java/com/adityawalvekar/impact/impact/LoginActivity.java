@@ -1,5 +1,6 @@
 package com.adityawalvekar.impact.impact;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button login, register;
     private RequestQueue queue;
     private SharedPreferences prefs;
+    private ProgressDialog dialog;
 
     private boolean validEmailId(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
@@ -130,19 +132,32 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Logging you in");
+        dialog.show();
         final String URL = "https://impact.adityawalvekar.com/login";
         queue.add(new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                dialog.dismiss();
+                Log.d("Login response", response);
                 try {
                     JSONObject res = new JSONObject(response);
                     if (res.has("status") && res.getBoolean("status")) {
                         //TODO Login in the user
                         prefs.edit()
                                 .putBoolean("auth", true)
-                                .putString("name", res.getString("name"))
+                                .putString("name", res.getString("fullname"))
                                 .putString("username", username.getEditText().getText().toString())
+                                .putString("image", res.getString("picture"))
                                 .apply();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        finish();
+                    } else if (res.has("status") && !res.getBoolean("status")) {
+                        if (res.getInt("code") == 401) {
+                            password.setError("Invalid credentials");
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -152,6 +167,7 @@ public class LoginActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                dialog.dismiss();
                 Log.d("Login error", error.toString());
                 Log.d("Login error body", error.getMessage());
             }

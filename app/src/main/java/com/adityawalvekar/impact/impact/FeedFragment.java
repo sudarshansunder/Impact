@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -84,14 +83,10 @@ public class FeedFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        Post p1 = new Post(10, "Varun", "Hello World");
-        testData.add(p1);
-        Post p2 = new Post(20, "Sud", "Yay!");
-        testData.add(p2);
-        Post p3 = new Post(30, "Aditya", "This is awesome!");
-        testData.add(p3);
-        Post p4 = new Post(40, "user", "Marina Beach Walk", "Walk and Clean the best beach ever!", "", "Chennai", true);
-        testData.add(p4);
+        testData.add(new Post(10, "Varun Ranganathan", "I is a sux"));
+        testData.add(new Post(20, "Sudarshan Sunder", getResources().getString(R.string.lipsum)));
+        testData.add(new Post(30, "Aditya Walvekar", getResources().getString(R.string.lipsum)));
+        testData.add(new Post(40, "John Doe", "Marina Beach Walk", "Walk and Clean the best beach ever!", "", "Chennai", true));
     }
 
     @Override
@@ -131,19 +126,19 @@ public class FeedFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.v("FeedFragment","Error Posting");
+                Log.v("FeedFragment", "Error Posting");
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> hashMap = new HashMap<String,String>();
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_data",Context.MODE_PRIVATE);
-                String userName = sharedPreferences.getString("username","");
-                hashMap.put("username",userName);
-                hashMap.put("desc",description);
-                hashMap.put("date",String.valueOf(currentTime));
-                Log.v("FeedFragment",String.valueOf(currentTime));
-                hashMap.put("event_type",String.valueOf(1));
+                HashMap<String, String> hashMap = new HashMap<String, String>();
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+                String userName = sharedPreferences.getString("username", "");
+                hashMap.put("username", userName);
+                hashMap.put("desc", description);
+                hashMap.put("date", String.valueOf(currentTime));
+                Log.v("FeedFragment", String.valueOf(currentTime));
+                hashMap.put("event_type", String.valueOf(1));
                 return hashMap;
             }
         };
