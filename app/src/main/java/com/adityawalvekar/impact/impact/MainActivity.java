@@ -1,6 +1,9 @@
 package com.adityawalvekar.impact.impact;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +44,12 @@ public class MainActivity extends AppCompatActivity
         ImageView profileImage;
         username = (TextView) headerView.findViewById(R.id.header_username);
         fullname = (TextView) headerView.findViewById(R.id.header_full_name);
-        //profileImage = (ImageView) headerView.findViewById(R.id.prof)
+        profileImage = (ImageView) headerView.findViewById(R.id.nav_profile_image);
+        byte[] decodedString = Base64.decode(prefs.getString("image", ""), Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        profileImage.setImageBitmap(decodedByte);
+        username.setText(prefs.getString("username", ""));
+        fullname.setText(prefs.getString("name", ""));
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -94,6 +103,10 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_events) {
 
+        } else if (id == R.id.nav_logout) {
+            prefs.edit().clear().apply();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
