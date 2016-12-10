@@ -113,6 +113,13 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_events) {
 
+        } else if(id == R.id.nav_find_friends){
+            FriendsFragment friendsFragment = new FriendsFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                fragmentManager.popBackStack();
+            }
+            fragmentManager.beginTransaction().replace(R.id.content_main, friendsFragment).commit();
         } else if (id == R.id.nav_logout) {
             prefs.edit().clear().apply();
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));

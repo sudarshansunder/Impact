@@ -16,6 +16,9 @@
         android:id="@+id/nav_events"
         android:title="My Events" />
     <item
+        android:id="@+id/nav_find_friends"
+        android:title="Friends" />
+    <item
         android:id="@+id/nav_logout"
         android:title="Logout" />
 </menu>

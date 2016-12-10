@@ -190,8 +190,11 @@ public class EventCreatorFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<String,String>();
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_date",MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_data",MODE_PRIVATE);
                 String userName = sharedPreferences.getString("username", "");
+                Log.v("EventCreatorFragment","Data sent is "+userName+" "+eventName
+                    +" "+eventDescription+" "+base64+" "+eventAddress+" "
+                    +String.valueOf(currTime)+" ");
                 hashMap.put("username", userName);
                 hashMap.put("title", eventName);
                 hashMap.put("desc", eventDescription);
