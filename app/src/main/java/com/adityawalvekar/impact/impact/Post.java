@@ -14,17 +14,17 @@ public class Post {
     String location;
     Boolean active;
     int type;
-    public void Post(){
+    public Post(){
 
     }
-    public void Post(int pid, String userName, String description){
+    public Post(int pid, String userName, String description){
         this.pid = pid;
         this.userName = userName;
         this.description = description;
         type = 1;
     }
 
-    public void Post(int pid, String userName, String title, String description, String imgUrl, String location, Boolean active){
+    public Post(int pid, String userName, String title, String description, String imgUrl, String location, Boolean active){
         this.pid = pid;
         this.userName = userName;
         this.title = title;

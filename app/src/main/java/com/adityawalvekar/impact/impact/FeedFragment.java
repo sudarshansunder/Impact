@@ -1,18 +1,33 @@
 package com.adityawalvekar.impact.impact;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -69,17 +84,13 @@ public class FeedFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        Post p1 = new Post();
-        p1.Post(10,"Varun","Hello World");
+        Post p1 = new Post(10, "Varun", "Hello World");
         testData.add(p1);
-        Post p2 = new Post();
-        p2.Post(20,"Sud","Yay!");
+        Post p2 = new Post(20, "Sud", "Yay!");
         testData.add(p2);
-        Post p3 = new Post();
-        p3.Post(30,"Aditya","This is awesome!");
+        Post p3 = new Post(30, "Aditya", "This is awesome!");
         testData.add(p3);
-        Post p4 = new Post();
-        p4.Post(40,"user","Marina Beach Walk","Walk and Clean the best beach ever!","","Chennai",true);
+        Post p4 = new Post(40, "user", "Marina Beach Walk", "Walk and Clean the best beach ever!", "", "Chennai", true);
         testData.add(p4);
     }
 
@@ -87,13 +98,56 @@ public class FeedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
+        Button postButton = (Button) rootView.findViewById(R.id.postButton);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String description;
+                EditText editText = (EditText) rootView.findViewById(R.id.postText);
+                Editable editable = editText.getEditableText();
+                description = editable.toString();
+                Date date = new Date();
+                long currentTime = date.getTime();
+                makePost(description, currentTime);
+            }
+        });
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.feedRecyclerView);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mPostAdapter = new PostAdapter(this.getActivity(),testData);
+        mPostAdapter = new PostAdapter(this.getActivity(), testData);
         mRecyclerView.setAdapter(mPostAdapter);
         return rootView;
+    }
+
+    public void makePost(final String description, final long currentTime) {
+        RequestQueue requestQueue = Volley.newRequestQueue(this.getActivity());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/post",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("FeedFragment","Error Posting");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> hashMap = new HashMap<String,String>();
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_data",Context.MODE_PRIVATE);
+                String userName = sharedPreferences.getString("username","");
+                hashMap.put("username",userName);
+                hashMap.put("desc",description);
+                hashMap.put("date",String.valueOf(currentTime));
+                Log.v("FeedFragment",String.valueOf(currentTime));
+                hashMap.put("event_type",String.valueOf(1));
+                return hashMap;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
