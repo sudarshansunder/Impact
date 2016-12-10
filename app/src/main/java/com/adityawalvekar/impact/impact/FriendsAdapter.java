@@ -52,6 +52,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         }else{
             holder.followButton.setText("Follow");
             holder.followButton.setEnabled(true);
+            holder.followButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Fill up Volley code here
+                    //Set as following
+                }
+            });
         }
     }
 

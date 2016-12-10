@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -110,6 +111,8 @@ public class FriendsFragment extends Fragment {
                 Friends f2 = new Friends("John","John",false);
                 mDataSet.add(f1);
                 mDataSet.add(f2);*/
+                mDataSet.clear();
+                friendsAdapter.notifyDataSetChanged();
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
                 String userName = sharedPreferences.getString("username", "");
                 RequestQueue requestQueue = Volley.newRequestQueue(getContext());
@@ -154,6 +157,16 @@ public class FriendsFragment extends Fragment {
     public void updateDataSet(){
         try {
             JSONObject jsonObject = new JSONObject(JSONResponse);
+            JSONArray jsonArray = jsonObject.getJSONArray("users");
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                String userName = jsonObject1.getString("username");
+                Boolean follows = jsonObject1.getBoolean("follows");
+                String userImage = jsonObject1.getString("image");
+                Friends friends = new Friends(userName,userName, follows);
+                mDataSet.add(friends);
+            }
+            friendsAdapter.notifyDataSetChanged();
         }catch (Exception ex){
             Log.v("FriendsFragment",ex.toString());
         }
