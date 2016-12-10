@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.renderscript.ScriptGroup;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.ButtonBarLayout;
 import android.text.Editable;
@@ -145,7 +146,7 @@ public class EventCreatorFragment extends Fragment {
                     return;
                 }
                 long currTime = calendar.getTime().getTime();
-                createEvent(eventName, eventDescription, eventAddress, base64, currTime);
+                createEvent(eventName, eventDescription, eventAddress, base64, currTime, view);
             }
         });
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -174,12 +175,12 @@ public class EventCreatorFragment extends Fragment {
         eventDateEditText.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
-    public void createEvent(final String eventName, final String eventDescription, final String eventAddress, String img, final long currTime){
+    public void createEvent(final String eventName, final String eventDescription, final String eventAddress, String img, final long currTime, final View view){
         RequestQueue requestQueue = Volley.newRequestQueue(this.getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/event", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                Snackbar.make(view,"Event was Created", Snackbar.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override

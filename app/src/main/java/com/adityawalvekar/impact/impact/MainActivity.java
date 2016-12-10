@@ -110,7 +110,12 @@ public class MainActivity extends AppCompatActivity
             }
             fragmentManager.beginTransaction().replace(R.id.content_main, eventCreatorFragment).commit();
         } else if (id == R.id.nav_profile) {
-
+            ProfileFragment profileFragment = new ProfileFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                fragmentManager.popBackStack();
+            }
+            fragmentManager.beginTransaction().replace(R.id.content_main, profileFragment).commit();
         } else if (id == R.id.nav_events) {
 
         } else if(id == R.id.nav_find_friends){
