@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Feed");
         prefs = getSharedPreferences("user_data", MODE_PRIVATE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -42,10 +43,6 @@ public class MainActivity extends AppCompatActivity
         username = (TextView) headerView.findViewById(R.id.header_username);
         fullname = (TextView) headerView.findViewById(R.id.header_full_name);
         profileImage = (ImageView) headerView.findViewById(R.id.nav_profile_image);
-        //byte[] decodedString = Base64.decode(prefs.getString("image", ""), Base64.DEFAULT);
-        //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        //profileImage.setImageBitmap(decodedByte);
-
         ImageViewBase64Loader imageViewBase64Loader = new ImageViewBase64Loader(this);
         imageViewBase64Loader.loadBitmap(prefs.getString("image", ""), profileImage);
         username.setText(prefs.getString("username", ""));
@@ -96,6 +93,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_feed) {
 
+            getSupportActionBar().setTitle("Feed");
             FeedFragment feedFragment = new FeedFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
@@ -103,6 +101,7 @@ public class MainActivity extends AppCompatActivity
             }
             fragmentManager.beginTransaction().replace(R.id.content_main, feedFragment).commit();
         } else if (id == R.id.nav_create_event) {
+            getSupportActionBar().setTitle("Create Event");
             EventCreatorFragment eventCreatorFragment = new EventCreatorFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
@@ -110,6 +109,7 @@ public class MainActivity extends AppCompatActivity
             }
             fragmentManager.beginTransaction().replace(R.id.content_main, eventCreatorFragment).commit();
         } else if (id == R.id.nav_profile) {
+            getSupportActionBar().setTitle("Profile");
             ProfileFragment profileFragment = new ProfileFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity
             }
             fragmentManager.beginTransaction().replace(R.id.content_main, profileFragment).commit();
         } else if (id == R.id.nav_events) {
+            getSupportActionBar().setTitle("My Events");
             MyEventsFragment profileFragment = new MyEventsFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity
             }
             fragmentManager.beginTransaction().replace(R.id.content_main, profileFragment).commit();
         } else if (id == R.id.nav_find_friends) {
+            getSupportActionBar().setTitle("Find Friends");
             FriendsFragment friendsFragment = new FriendsFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
