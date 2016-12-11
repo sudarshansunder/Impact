@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-        Log.d("Token is ", FirebaseInstanceId.getInstance().getToken());
+        //Log.d("Token is ", FirebaseInstanceId.getInstance().getToken());
     }
 
     private void linkViews() {

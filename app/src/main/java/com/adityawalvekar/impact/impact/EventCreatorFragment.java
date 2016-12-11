@@ -57,6 +57,8 @@ public class EventCreatorFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_event_creator, container, false);
         imageView = (ImageView) rootView.findViewById(R.id.eventCreatorImage);
+        ImageViewBitmapLoader imageViewBitmapLoader = new ImageViewBitmapLoader(getContext());
+        imageViewBitmapLoader.loadBitmap(R.drawable.sunset, imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

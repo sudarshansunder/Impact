@@ -76,7 +76,7 @@ public class ImageViewBitmapLoader {
         @Override
         protected Bitmap doInBackground(Integer... params) {
             data = params[0];
-            return decodeSampledBitmapFromResource(context.getResources(), data, 300, 300);
+            return decodeSampledBitmapFromResource(context.getResources(), data, 200, 200);
         }
 
         // Once complete, see if ImageView is still around and set bitmap.
