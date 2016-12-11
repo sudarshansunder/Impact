@@ -82,13 +82,12 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             eventPostViewHolder.eventDateTime.setText(mDataSet.get(position).dateTime);
             //eventPostViewHolder.userImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
             //eventPostViewHolder.eventImage.setImageBitmap(decodeImage(mDataSet.get(position).eventImage));
-            if(mDataSet.get(position).attending==true){
-                eventPostViewHolder.attendEventButton.setText("GOING");
+            if (mDataSet.get(position).attending) {
+                eventPostViewHolder.attendEventButton.setText("Going");
                 eventPostViewHolder.attendEventButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //Open Dialog here
-                        Toast.makeText(mContext, "Clicked!", Toast.LENGTH_SHORT).show();
                         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
                         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/unattend",
                                 new Response.Listener<String>() {
@@ -101,25 +100,25 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.v("PostAdapter","Unable to Attend Event");
+                                Log.v("PostAdapter", "Unable to Attend Event");
                             }
-                        }){
+                        }) {
                             @Override
                             protected Map<String, String> getParams() throws AuthFailureError {
-                                HashMap<String,String> hashMap = new HashMap<String, String>();
+                                HashMap<String, String> hashMap = new HashMap<String, String>();
                                 SharedPreferences sharedPreferences = mContext.getSharedPreferences("user_data", Context.MODE_PRIVATE);
                                 String userName = sharedPreferences.getString("username", "");
 
-                                Log.v("PostAdapter",userName + " "+ String.valueOf(mDataSet.get(position).pid));
-                                hashMap.put("username",userName);
-                                hashMap.put("pid",String.valueOf(mDataSet.get(position).pid));
+                                Log.v("PostAdapter", userName + " " + String.valueOf(mDataSet.get(position).pid));
+                                hashMap.put("username", userName);
+                                hashMap.put("pid", String.valueOf(mDataSet.get(position).pid));
                                 return hashMap;
                             }
                         };
                         requestQueue.add(stringRequest);
                     }
                 });
-            }else{
+            } else {
                 eventPostViewHolder.attendEventButton.setText("Attend");
                 eventPostViewHolder.attendEventButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -131,24 +130,24 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
-                                        eventPostViewHolder.attendEventButton.setText("GOING");
+                                        eventPostViewHolder.attendEventButton.setText("Going");
                                         mDataSet.get(position).attending = true;
                                         notifyDataSetChanged();
                                     }
                                 }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.v("PostAdapter","Unable to Attend Event");
+                                Log.v("PostAdapter", "Unable to Attend Event");
                             }
-                        }){
+                        }) {
                             @Override
                             protected Map<String, String> getParams() throws AuthFailureError {
-                                HashMap<String,String> hashMap = new HashMap<String, String>();
+                                HashMap<String, String> hashMap = new HashMap<String, String>();
                                 SharedPreferences sharedPreferences = mContext.getSharedPreferences("user_data", Context.MODE_PRIVATE);
                                 String userName = sharedPreferences.getString("username", "");
-                                Log.v("PostAdapter",userName + " "+ String.valueOf(mDataSet.get(position).pid));
-                                hashMap.put("username",userName);
-                                hashMap.put("pid",String.valueOf(mDataSet.get(position).pid));
+                                Log.v("PostAdapter", userName + " " + String.valueOf(mDataSet.get(position).pid));
+                                hashMap.put("username", userName);
+                                hashMap.put("pid", String.valueOf(mDataSet.get(position).pid));
                                 return hashMap;
                             }
                         };

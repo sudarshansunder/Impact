@@ -52,7 +52,7 @@ public class FriendsFragment extends Fragment {
         friendsAdapter = new FriendsAdapter(getContext(), mDataSet);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(friendsAdapter);
-        searchView.setQueryHint("Enter friend's name");
+        searchView.setQueryHint("Search for someone");
         searchView.setQuery("", true);
         searchView.setFocusable(true);
         searchView.setIconified(false);
@@ -114,7 +114,7 @@ public class FriendsFragment extends Fragment {
                 Boolean follows = jsonObject1.getBoolean("follows");
                 String userImage = jsonObject1.getString("image");
                 String fullName = jsonObject1.getString("fullname");
-                Friends friends = new Friends(fullName, userName, follows);
+                Friends friends = new Friends(fullName, userName, userImage, follows);
                 mDataSet.add(friends);
             }
             friendsAdapter.notifyDataSetChanged();

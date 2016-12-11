@@ -45,6 +45,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     @Override
     public void onBindViewHolder(final FriendsViewHolder holder, final int position) {
         holder.friendsName.setText(mDataSet.get(position).fullname);
+        ImageViewBase64Loader loader = new ImageViewBase64Loader(mContext);
+        loader.loadBitmap(mDataSet.get(position).image, holder.friendsImage);
         if (mDataSet.get(holder.getAdapterPosition()).following)
             holder.followButton.setText("Unfollow");
         else

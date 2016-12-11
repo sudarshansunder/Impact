@@ -54,8 +54,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Description"
-                    android:maxLines="1" />
+                    android:hint="Description" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -72,19 +71,12 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <EditText
                 android:id="@+id/eventDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/editText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Date"
-                    android:maxLines="1" />
-
-            </android.support.design.widget.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:hint="Date"
+                android:maxLines="1" />
 
             <Button
                 android:id="@+id/createEventButton"

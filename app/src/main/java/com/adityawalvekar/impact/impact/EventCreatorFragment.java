@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
@@ -45,7 +46,7 @@ public class EventCreatorFragment extends Fragment {
     final Calendar calendar = Calendar.getInstance();
     ImageView imageView;
     String base64 = "";
-    TextInputLayout eventDateTextInputLayout;
+    EditText eventDateTextInputLayout;
 
     public EventCreatorFragment() {
     }
@@ -83,7 +84,7 @@ public class EventCreatorFragment extends Fragment {
                 String eventName = editable1.toString();
                 String eventDescription = editable2.toString();
                 String eventAddress = editable3.toString();
-                if (eventDateTextInputLayout.getEditText().getText().toString().matches("")) {
+                if (eventDateTextInputLayout.getText().toString().matches("")) {
                     Snackbar.make(view, "Please choose a Date", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
@@ -104,8 +105,8 @@ public class EventCreatorFragment extends Fragment {
                 updateLabel();
             }
         };
-        eventDateTextInputLayout = (TextInputLayout) rootView.findViewById(R.id.eventDate);
-        eventDateTextInputLayout.getEditText().setInputType(InputType.TYPE_NULL);
+        eventDateTextInputLayout = (EditText) rootView.findViewById(R.id.eventDate);
+        eventDateTextInputLayout.setInputType(InputType.TYPE_NULL);
         eventDateTextInputLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +119,7 @@ public class EventCreatorFragment extends Fragment {
     private void updateLabel() {
         String myFormat = "MM/dd/yy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(myFormat, Locale.US);
-        eventDateTextInputLayout.getEditText().setText(simpleDateFormat.format(calendar.getTime()));
+        eventDateTextInputLayout.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
     public void createEvent(final String eventName, final String eventDescription, final String eventAddress, String img, final long currTime, final View view) {

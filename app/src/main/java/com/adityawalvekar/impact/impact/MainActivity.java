@@ -2,8 +2,6 @@ package com.adityawalvekar.impact.impact;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -12,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -120,8 +117,13 @@ public class MainActivity extends AppCompatActivity
             }
             fragmentManager.beginTransaction().replace(R.id.content_main, profileFragment).commit();
         } else if (id == R.id.nav_events) {
-
-        } else if(id == R.id.nav_find_friends){
+            MyEventsFragment profileFragment = new MyEventsFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                fragmentManager.popBackStack();
+            }
+            fragmentManager.beginTransaction().replace(R.id.content_main, profileFragment).commit();
+        } else if (id == R.id.nav_find_friends) {
             FriendsFragment friendsFragment = new FriendsFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
