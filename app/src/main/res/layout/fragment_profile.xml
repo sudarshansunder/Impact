@@ -80,7 +80,7 @@
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_margin="10dp"
                 android:padding="8dp">
 
@@ -88,22 +88,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:src="@drawable/googlenow" />
-                    </android.support.v7.widget.CardView>
+                    <TextView
+                        android:id="@+id/contributionText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Contribution to society"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/contributionActualText"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="Here's a of all you've done for the society!" />
+                        android:layout_below="@+id/contributionText"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="10dp"
+                        android:padding="5dp"
+                        android:text="&quot;You have helped Siddharth come closer to him dream of becoming a scientist&quot; - Vidya India \n\n &quot;Thanks to you, Divyansh is one step closer to beating Tubercolosis&quot; - Smile Foundation India \n\n &quot;Parvati is rebuilding her life after being affected by the Chennai floods with your help&quot; - AID India" />
+
                 </RelativeLayout>
+
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
@@ -115,19 +121,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Frequency of contribution"
+                        android:textStyle="bold" />
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/regularityPieChart"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp">
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="10dp">
 
                     </com.github.mikephil.charting.charts.PieChart>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="Over the past 4 weeks, you've helped feed 10 kids!" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -140,17 +150,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Activity"
+                        android:textStyle="bold" />
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/contributionLineChart"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="Here's your contribution over the past few weeks!" />
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="10dp" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -163,6 +176,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Here are some pictures from Sukhshanti oldage homes"
+                        android:textStyle="bold" />
 
                     <HorizontalScrollView
                         android:id="@+id/horizontalScroll"
@@ -176,11 +198,6 @@
                             android:orientation="horizontal"></LinearLayout>
                     </HorizontalScrollView>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="Here are some pictures from Sukhshanthi Apartments" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -191,19 +208,17 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="100dp"
                     android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/keepContributingImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="Great job! You've done so much for the people around you! Keep contributing!" />
+                        android:layout_gravity="center"
+                        android:layout_margin="20dp"
+                        android:text="Great job! You've done so much for the people around you! Keep contributing!"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>

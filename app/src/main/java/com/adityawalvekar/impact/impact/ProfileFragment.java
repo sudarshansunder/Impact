@@ -10,13 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -49,7 +46,7 @@ public class ProfileFragment extends Fragment {
         entries.add(new PieEntry(95f, "Impact Created"));
         entries.add(new PieEntry(5f, "Missed"));
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(new int[]{Color.parseColor("#90CAF9"),Color.parseColor("#FF5722")});
+        dataSet.setColors(new int[]{Color.parseColor("#90CAF9"), Color.parseColor("#FF5722")});
         dataSet.setValueTextColor(Color.parseColor("#000000"));
         PieData pieData = new PieData(dataSet);
         pieChart.setData(pieData);
@@ -74,42 +71,19 @@ public class ProfileFragment extends Fragment {
         lineChart.getAxisLeft().setEnabled(false);
         lineChart.getXAxis().setEnabled(false);
         lineChart.setDescription(description);
-        /*lineChart.getAxisLeft().setDrawLabels(false);
-        lineChart.getAxisRight().setDrawLabels(false);
-        lineChart.getXAxis().setDrawLabels(false);
-        lineChart.getLegend().setEnabled(false);
-        lineChart.getAxisLeft().setDrawGridLines(false);
-        lineChart.getAxisRight().setDrawGridLines(false);
-        lineChart.getXAxis().setDrawGridLines(false);*/
         lineChart.invalidate();
 
-        /*LineDataSet barDataSet = new LineDataSet(setComp1);
-        barDataSet.setLabel("*Contribution as measured by us");
-        barDataSet.setColors(new int[]{Color.parseColor("#90CAF9"), Color.parseColor("#FF5722"), Color.parseColor("#90CAF9"), Color.parseColor("#90CAF9")});
-        LineData barData = new LineData(barDataSet);
-        lineChart.setData(barData);
-        lineChart.invalidate();*/
 
         LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.oldAgeHomeImages);
         ImageView imageView = new ImageView(getActivity());
         ImageViewBitmapLoader imageViewBitmapLoader = new ImageViewBitmapLoader(getContext());
         imageViewBitmapLoader.loadBitmap(R.drawable.oldagehome1, imageView);
-        //imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.oldagehome1));
-        //imageView.setScaleType(ImageView.ScaleType.CENTER);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         linearLayout.addView(imageView);
-        //ImageView imageView1 = new ImageView(getActivity());
-        //imageView1.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.oldagehome3));
-        //imageView1.setScaleType(ImageView.ScaleType.CENTER);
-        //linearLayout.addView(imageView1);
         ImageView imageView2 = new ImageView(getActivity());
         imageViewBitmapLoader.loadBitmap(R.drawable.oldagehome2, imageView2);
-        //imageView2.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.oldagehome2));
-        //imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        imageView2.setScaleType(ImageView.ScaleType.FIT_XY);
         linearLayout.addView(imageView2);
-        ImageView keepContributingImage = (ImageView) rootView.findViewById(R.id.keepContributingImage);
-
-        //ImageViewBitmapLoader imageViewBitmapLoader = new ImageViewBitmapLoader(getContext());
-        imageViewBitmapLoader.loadBitmap(R.drawable.charity11, keepContributingImage);
         return rootView;
     }
 }
