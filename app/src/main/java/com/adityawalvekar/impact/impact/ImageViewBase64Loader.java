@@ -1,7 +1,6 @@
 package com.adityawalvekar.impact.impact;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -10,14 +9,13 @@ import android.widget.ImageView;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Created by vvvro on 8/10/2016.
- */
 public class ImageViewBase64Loader {
     Context context;
-    public ImageViewBase64Loader(Context mContext){
+
+    public ImageViewBase64Loader(Context mContext) {
         context = mContext;
     }
+
     public static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
@@ -68,8 +66,8 @@ public class ImageViewBase64Loader {
 
     class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
         private final WeakReference<ImageView> imageViewReference;
-        private int data = 0;
         String base64 = "";
+        private int data = 0;
 
         public BitmapWorkerTask(ImageView circleImageView) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
@@ -80,7 +78,7 @@ public class ImageViewBase64Loader {
         @Override
         protected Bitmap doInBackground(String... strings) {
             base64 = strings[0];
-            return decodeSampledBitmapFromResource(base64,200,200);
+            return decodeSampledBitmapFromResource(base64, 200, 200);
         }
 
         // Once complete, see if ImageView is still around and set bitmap.

@@ -21,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -122,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+        Log.d("Token is ", FirebaseInstanceId.getInstance().getToken());
     }
 
     private void linkViews() {
@@ -177,6 +179,7 @@ public class LoginActivity extends AppCompatActivity {
                 HashMap<String, String> params = new HashMap<String, String>();
                 params.put("username", username.getEditText().getText().toString());
                 params.put("password", password.getEditText().getText().toString());
+                params.put("token", FirebaseInstanceId.getInstance().getToken());
                 return params;
             }
         });

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "92090348332",
+    "firebase_url": "https://impact-9f76e.firebaseio.com",
+    "project_id": "impact-9f76e",
+    "storage_bucket": "impact-9f76e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92090348332:android:8f7e5e611eb8dbfa",
+        "android_client_info": {
+          "package_name": "com.adityawalvekar.impact.impact"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92090348332-m4d48euig3mo5ajn6r249u9t1b1ilv1t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adityawalvekar.impact.impact",
+            "certificate_hash": "A1FC74615CAF2E6E7FF87F8C0286557FD53AA0E6"
+          }
+        },
+        {
+          "client_id": "92090348332-2tpa6lev25pc5g4m8kp3ormpehq0te79.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBml9_FxouQHNb5UkT63hUEO67_10jEi6M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92090348332-2tpa6lev25pc5g4m8kp3ormpehq0te79.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,20 +15,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
             android:orientation="vertical"
             android:weightSum="1">
 
             <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_impact" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher" />
+                android:layout_marginTop="20dp"
+                android:text="Create an impact today!"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/email_login"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
 
                 <EditText
                     android:layout_width="match_parent"
