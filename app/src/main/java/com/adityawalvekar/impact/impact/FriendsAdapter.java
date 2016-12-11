@@ -20,7 +20,6 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -34,52 +33,48 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     ArrayList<Friends> mDataSet;
     Context mContext;
 
-    public FriendsAdapter(){
+    public FriendsAdapter() {
 
     }
 
-    public FriendsAdapter(Context myContext, ArrayList<Friends> myDataSet){
+    public FriendsAdapter(Context myContext, ArrayList<Friends> myDataSet) {
         mContext = myContext;
         mDataSet = myDataSet;
-    }
-
-    public static class FriendsViewHolder extends RecyclerView.ViewHolder{
-        TextView friendsName;
-        Button followButton;
-        CircleImageView friendsImage;
-        FriendsViewHolder(View v){
-            super(v);
-            friendsName = (TextView) v.findViewById(R.id.friendsName);
-            followButton = (Button) v.findViewById(R.id.follow);
-            friendsImage = (CircleImageView) v.findViewById(R.id.friendsImage);
-        }
     }
 
     @Override
     public void onBindViewHolder(final FriendsViewHolder holder, final int position) {
         holder.friendsName.setText(mDataSet.get(position).fullname);
-        if(mDataSet.get(position).following==true){
-            holder.followButton.setText("UNFOLLOW");
+        if (mDataSet.get(holder.getAdapterPosition()).following)
+            holder.followButton.setText("Unfollow");
+        else
+            holder.followButton.setText("Follow");
+        holder.followButton.setOnClickListener(null);
+        if (mDataSet.get(position).following) {
             holder.followButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d("Value of following for " + mDataSet.get(position).fullname, mDataSet.get(position).following + "");
                     RequestQueue requestQueue = Volley.newRequestQueue(mContext);
                     requestQueue.cancelAll(mContext);
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/unfollow",
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    holder.followButton.setText("FOLLOW");
+                                    Log.d("Unfollowing " + mDataSet.get(holder.getAdapterPosition()).fullname, response);
+                                    holder.followButton.setText("Follow");
+                                    mDataSet.get(holder.getAdapterPosition()).following = false;
+                                    notifyDataSetChanged();
                                 }
                             }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.v("FriendsAdapter",error.toString());
+                            Log.v("FriendsAdapter", error.toString());
                         }
                     }) {
                         @Override
                         protected Map<String, String> getParams() throws AuthFailureError {
-                            HashMap<String,String> hashMap = new HashMap<String, String>();
+                            HashMap<String, String> hashMap = new HashMap<String, String>();
                             SharedPreferences sharedPreferences = mContext.getSharedPreferences("user_data", Context.MODE_PRIVATE);
                             String userName = sharedPreferences.getString("username", "");
                             hashMap.put("username", userName);
@@ -90,9 +85,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                     requestQueue.add(stringRequest);
                 }
             });
-        }else{
-            holder.followButton.setText("FOLLOW");
-            holder.followButton.setEnabled(true);
+        } else {
+            Log.d("Value of following for " + mDataSet.get(position).fullname, mDataSet.get(position).following + "");
             holder.followButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -102,17 +96,20 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    holder.followButton.setText("UNFOLLOW");;
+                                    Log.d("Following " + mDataSet.get(holder.getAdapterPosition()).fullname, response);
+                                    holder.followButton.setText("Unfollow");
+                                    mDataSet.get(holder.getAdapterPosition()).following = true;
+                                    notifyDataSetChanged();
                                 }
                             }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.v("FriendsAdapter",error.toString());
+                            Log.v("FriendsAdapter", error.toString());
                         }
                     }) {
                         @Override
                         protected Map<String, String> getParams() throws AuthFailureError {
-                            HashMap<String,String> hashMap = new HashMap<String, String>();
+                            HashMap<String, String> hashMap = new HashMap<String, String>();
                             SharedPreferences sharedPreferences = mContext.getSharedPreferences("user_data", Context.MODE_PRIVATE);
                             String userName = sharedPreferences.getString("username", "");
                             hashMap.put("username", userName);
@@ -138,5 +135,18 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     @Override
     public int getItemCount() {
         return mDataSet.size();
+    }
+
+    public static class FriendsViewHolder extends RecyclerView.ViewHolder {
+        TextView friendsName;
+        Button followButton;
+        CircleImageView friendsImage;
+
+        FriendsViewHolder(View v) {
+            super(v);
+            friendsName = (TextView) v.findViewById(R.id.friendsName);
+            followButton = (Button) v.findViewById(R.id.follow);
+            friendsImage = (CircleImageView) v.findViewById(R.id.friendsImage);
+        }
     }
 }
