@@ -163,7 +163,8 @@ public class FriendsFragment extends Fragment {
                 String userName = jsonObject1.getString("username");
                 Boolean follows = jsonObject1.getBoolean("follows");
                 String userImage = jsonObject1.getString("image");
-                Friends friends = new Friends(userName,userName, follows);
+                String fullName = jsonObject1.getString("fullname");
+                Friends friends = new Friends(fullName,userName, follows);
                 mDataSet.add(friends);
             }
             friendsAdapter.notifyDataSetChanged();

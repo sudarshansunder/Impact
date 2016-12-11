@@ -1,15 +1,27 @@
 package com.adityawalvekar.impact.impact;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,19 +56,71 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     }
 
     @Override
-    public void onBindViewHolder(FriendsViewHolder holder, int position) {
+    public void onBindViewHolder(final FriendsViewHolder holder, final int position) {
         holder.friendsName.setText(mDataSet.get(position).fullname);
         if(mDataSet.get(position).following==true){
-            holder.followButton.setText("Following");
-            holder.followButton.setEnabled(false);
+            holder.followButton.setText("UNFOLLOW");
+            holder.followButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                    requestQueue.cancelAll(mContext);
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/unfollow",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    holder.followButton.setText("FOLLOW");
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.v("FriendsAdapter",error.toString());
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            HashMap<String,String> hashMap = new HashMap<String, String>();
+                            SharedPreferences sharedPreferences = mContext.getSharedPreferences("user_data", Context.MODE_PRIVATE);
+                            String userName = sharedPreferences.getString("username", "");
+                            hashMap.put("username", userName);
+                            hashMap.put("follows", mDataSet.get(position).username);
+                            return hashMap;
+                        }
+                    };
+                    requestQueue.add(stringRequest);
+                }
+            });
         }else{
-            holder.followButton.setText("Follow");
+            holder.followButton.setText("FOLLOW");
             holder.followButton.setEnabled(true);
             holder.followButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Fill up Volley code here
-                    //Set as following
+                    RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                    requestQueue.cancelAll(mContext);
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/follow",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    holder.followButton.setText("UNFOLLOW");;
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.v("FriendsAdapter",error.toString());
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            HashMap<String,String> hashMap = new HashMap<String, String>();
+                            SharedPreferences sharedPreferences = mContext.getSharedPreferences("user_data", Context.MODE_PRIVATE);
+                            String userName = sharedPreferences.getString("username", "");
+                            hashMap.put("username", userName);
+                            hashMap.put("follows", mDataSet.get(position).username);
+                            return hashMap;
+                        }
+                    };
+                    requestQueue.add(stringRequest);
                 }
             });
         }
