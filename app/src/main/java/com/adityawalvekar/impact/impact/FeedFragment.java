@@ -146,7 +146,7 @@ public class FeedFragment extends Fragment {
                         newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("desc"), post.getString("date"), post.getBoolean("active"), post.getString("userimage")));
                         break;
                     case 2:
-                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("title"), post.getString("desc"), post.getString("location"), post.getString("date"), post.getBoolean("active"), post.getString("userimage"), post.getString("postimage")));
+                        newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("title"), post.getString("desc"), post.getString("location"), post.getString("date"), post.getBoolean("active"), post.getString("userimage"), post.getString("postimage"), post.getBoolean("attending")));
                         break;
                     case 3:
                         newsFeed.add(new Post(post.getInt("pid"), post.getString("name"), post.getString("userimage"), post.getString("postimage")));

@@ -1,22 +1,32 @@
 package com.adityawalvekar.impact.impact;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -54,7 +64,7 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder.getItemViewType() == 1) {
             PostViewHolder postViewHolder = (PostViewHolder) holder;
             postViewHolder.userName.setText(mDataSet.get(position).userName);
@@ -64,7 +74,7 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ImageViewBase64Loader imageViewBase64Loader = new ImageViewBase64Loader(mContext);
             imageViewBase64Loader.loadBitmap(mDataSet.get(position).userImage, postViewHolder.userImage);
         } else if (holder.getItemViewType() == 2) {
-            EventPostViewHolder eventPostViewHolder = (EventPostViewHolder) holder;
+            final EventPostViewHolder eventPostViewHolder = (EventPostViewHolder) holder;
             eventPostViewHolder.eventLocation.setText(mDataSet.get(position).location);
             eventPostViewHolder.eventTitle.setText(mDataSet.get(position).title);
             eventPostViewHolder.eventCreator.setText(mDataSet.get(position).userName);
@@ -72,6 +82,80 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             eventPostViewHolder.eventDateTime.setText(mDataSet.get(position).dateTime);
             //eventPostViewHolder.userImage.setImageBitmap(decodeImage(mDataSet.get(position).userImage));
             //eventPostViewHolder.eventImage.setImageBitmap(decodeImage(mDataSet.get(position).eventImage));
+            if(mDataSet.get(position).attending==true){
+                eventPostViewHolder.attendEventButton.setText("GOING");
+                eventPostViewHolder.attendEventButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Open Dialog here
+                        Toast.makeText(mContext, "Clicked!", Toast.LENGTH_SHORT).show();
+                        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/unattend",
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        eventPostViewHolder.attendEventButton.setText("Attend");
+                                        mDataSet.get(position).attending = false;
+                                        notifyDataSetChanged();
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.v("PostAdapter","Unable to Attend Event");
+                            }
+                        }){
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                HashMap<String,String> hashMap = new HashMap<String, String>();
+                                SharedPreferences sharedPreferences = mContext.getSharedPreferences("user_data", Context.MODE_PRIVATE);
+                                String userName = sharedPreferences.getString("username", "");
+
+                                Log.v("PostAdapter",userName + " "+ String.valueOf(mDataSet.get(position).pid));
+                                hashMap.put("username",userName);
+                                hashMap.put("pid",String.valueOf(mDataSet.get(position).pid));
+                                return hashMap;
+                            }
+                        };
+                        requestQueue.add(stringRequest);
+                    }
+                });
+            }else{
+                eventPostViewHolder.attendEventButton.setText("Attend");
+                eventPostViewHolder.attendEventButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Start attending event
+                        Toast.makeText(mContext, "Clicked!", Toast.LENGTH_SHORT).show();
+                        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://impact.adityawalvekar.com/attend",
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        eventPostViewHolder.attendEventButton.setText("GOING");
+                                        mDataSet.get(position).attending = true;
+                                        notifyDataSetChanged();
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.v("PostAdapter","Unable to Attend Event");
+                            }
+                        }){
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                HashMap<String,String> hashMap = new HashMap<String, String>();
+                                SharedPreferences sharedPreferences = mContext.getSharedPreferences("user_data", Context.MODE_PRIVATE);
+                                String userName = sharedPreferences.getString("username", "");
+                                Log.v("PostAdapter",userName + " "+ String.valueOf(mDataSet.get(position).pid));
+                                hashMap.put("username",userName);
+                                hashMap.put("pid",String.valueOf(mDataSet.get(position).pid));
+                                return hashMap;
+                            }
+                        };
+                        requestQueue.add(stringRequest);
+                    }
+                });
+            }
             ImageViewBase64Loader imageViewBase64Loader = new ImageViewBase64Loader(mContext);
             imageViewBase64Loader.loadBitmap(mDataSet.get(position).userImage, eventPostViewHolder.userImage);
             imageViewBase64Loader.loadBitmap(mDataSet.get(position).eventImage, eventPostViewHolder.eventImage);
@@ -119,7 +203,7 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView eventImage;
         TextView eventDateTime;
         ImageView userImage;
-        Button attendEvent;
+        Button attendEventButton;
 
         EventPostViewHolder(View v) {
             super(v);
@@ -130,7 +214,7 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             eventImage = (ImageView) v.findViewById(R.id.eventImage);
             userImage = (ImageView) v.findViewById(R.id.eventPosterImage);
             eventDateTime = (TextView) v.findViewById(R.id.eventDateTime);
-            attendEvent = (Button) v.findViewById(R.id.attendButton);
+            attendEventButton = (Button) v.findViewById(R.id.attendButton);
 
             eventImage.setOnClickListener(new View.OnClickListener() {
                 @Override

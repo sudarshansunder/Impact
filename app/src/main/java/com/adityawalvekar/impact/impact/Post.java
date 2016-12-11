@@ -9,6 +9,7 @@ public class Post {
     String userImage;
     String eventImage;
     boolean active;
+    boolean attending;
     int type;
     private String date, time;
 
@@ -23,7 +24,7 @@ public class Post {
         parseDateTime();
     }
 
-    public Post(int pid, String userName, String title, String description, String location, String dateTime, boolean active, String userImage, String eventImage) { //Case 2
+    public Post(int pid, String userName, String title, String description, String location, String dateTime, boolean active, String userImage, String eventImage, Boolean attending) { //Case 2
         this.pid = pid;
         this.userImage = userImage;
         this.eventImage = eventImage;
@@ -33,6 +34,7 @@ public class Post {
         this.location = location;
         this.active = active;
         this.dateTime = dateTime;
+        this.attending = attending;
         parseDateTime();
         type = 2;
     }
