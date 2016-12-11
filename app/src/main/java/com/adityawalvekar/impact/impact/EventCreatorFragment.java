@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
@@ -18,9 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -46,7 +45,7 @@ public class EventCreatorFragment extends Fragment {
     final Calendar calendar = Calendar.getInstance();
     ImageView imageView;
     String base64 = "";
-    EditText eventDateEditText;
+    TextInputLayout eventDateTextInputLayout;
 
     public EventCreatorFragment() {
     }
@@ -71,25 +70,25 @@ public class EventCreatorFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText eventNameEditText = (EditText) rootView.findViewById(R.id.eventCreatorName);
-                EditText eventDescriptionEditText = (EditText) rootView.findViewById(R.id.eventCreatorDescription);
-                EditText eventAddressEditText = (EditText) rootView.findViewById(R.id.eventCreatorAddress);
-                if (eventNameEditText.getText().toString().matches("") || eventDescriptionEditText.getText().toString().matches("") || eventAddressEditText.getText().toString().matches("")) {
-                    Toast.makeText(getActivity(), "Please enter data in all the fields", Toast.LENGTH_SHORT).show();
+                TextInputLayout eventNameTextInputLayout = (TextInputLayout) rootView.findViewById(R.id.eventCreatorName);
+                TextInputLayout eventDescriptionTextInputLayout = (TextInputLayout) rootView.findViewById(R.id.eventCreatorDescription);
+                TextInputLayout eventAddressTextInputLayout = (TextInputLayout) rootView.findViewById(R.id.eventCreatorAddress);
+                if (eventNameTextInputLayout.getEditText().getText().toString().matches("") || eventDescriptionTextInputLayout.getEditText().getText().toString().matches("") || eventAddressTextInputLayout.getEditText().getText().toString().matches("")) {
+                    Snackbar.make(view, "Please enter data in all the fields", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                Editable editable1 = eventNameEditText.getText();
-                Editable editable2 = eventDescriptionEditText.getText();
-                Editable editable3 = eventAddressEditText.getText();
+                Editable editable1 = eventNameTextInputLayout.getEditText().getText();
+                Editable editable2 = eventDescriptionTextInputLayout.getEditText().getText();
+                Editable editable3 = eventAddressTextInputLayout.getEditText().getText();
                 String eventName = editable1.toString();
                 String eventDescription = editable2.toString();
                 String eventAddress = editable3.toString();
-                if (eventDateEditText.getText().toString().matches("")) {
-                    Toast.makeText(getActivity(), "Please choose a Date", Toast.LENGTH_SHORT).show();
+                if (eventDateTextInputLayout.getEditText().getText().toString().matches("")) {
+                    Snackbar.make(view, "Please choose a Date", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 if (base64.matches("")) {
-                    Toast.makeText(getActivity(), "Please pick an Image", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, "Please pick an Image", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 long currTime = calendar.getTime().getTime();
@@ -105,9 +104,9 @@ public class EventCreatorFragment extends Fragment {
                 updateLabel();
             }
         };
-        eventDateEditText = (EditText) rootView.findViewById(R.id.eventDate);
-        eventDateEditText.setInputType(InputType.TYPE_NULL);
-        eventDateEditText.setOnClickListener(new View.OnClickListener() {
+        eventDateTextInputLayout = (TextInputLayout) rootView.findViewById(R.id.eventDate);
+        eventDateTextInputLayout.getEditText().setInputType(InputType.TYPE_NULL);
+        eventDateTextInputLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new DatePickerDialog(getActivity(), date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -119,7 +118,7 @@ public class EventCreatorFragment extends Fragment {
     private void updateLabel() {
         String myFormat = "MM/dd/yy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(myFormat, Locale.US);
-        eventDateEditText.setText(simpleDateFormat.format(calendar.getTime()));
+        eventDateTextInputLayout.getEditText().setText(simpleDateFormat.format(calendar.getTime()));
     }
 
     public void createEvent(final String eventName, final String eventDescription, final String eventAddress, String img, final long currTime, final View view) {

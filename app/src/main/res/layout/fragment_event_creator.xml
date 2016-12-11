@@ -23,6 +23,7 @@
                 android:layout_width="350dp"
                 android:layout_height="170dp"
                 android:layout_gravity="center"
+                android:scaleType="fitXY"
                 android:src="@drawable/sunset" />
 
             <TextView
