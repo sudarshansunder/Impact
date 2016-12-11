@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -118,6 +119,7 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView eventImage;
         TextView eventDateTime;
         ImageView userImage;
+        Button attendEvent;
 
         EventPostViewHolder(View v) {
             super(v);
@@ -128,6 +130,8 @@ class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             eventImage = (ImageView) v.findViewById(R.id.eventImage);
             userImage = (ImageView) v.findViewById(R.id.eventPosterImage);
             eventDateTime = (TextView) v.findViewById(R.id.eventDateTime);
+            attendEvent = (Button) v.findViewById(R.id.attendButton);
+
             eventImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
