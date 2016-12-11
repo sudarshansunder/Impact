@@ -45,9 +45,12 @@ public class MainActivity extends AppCompatActivity
         username = (TextView) headerView.findViewById(R.id.header_username);
         fullname = (TextView) headerView.findViewById(R.id.header_full_name);
         profileImage = (ImageView) headerView.findViewById(R.id.nav_profile_image);
-        byte[] decodedString = Base64.decode(prefs.getString("image", ""), Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        profileImage.setImageBitmap(decodedByte);
+        //byte[] decodedString = Base64.decode(prefs.getString("image", ""), Base64.DEFAULT);
+        //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        //profileImage.setImageBitmap(decodedByte);
+
+        ImageViewBase64Loader imageViewBase64Loader = new ImageViewBase64Loader(this);
+        imageViewBase64Loader.loadBitmap(prefs.getString("image", ""), profileImage);
         username.setText(prefs.getString("username", ""));
         fullname.setText(prefs.getString("name", ""));
         navigationView.setNavigationItemSelectedListener(this);
